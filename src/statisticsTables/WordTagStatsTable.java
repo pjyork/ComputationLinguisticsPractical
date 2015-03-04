@@ -28,4 +28,8 @@ public class WordTagStatsTable implements Serializable {
 		}
 		wordStats.addInstanceOfTag(tag);
 	}
+	
+	public double getTagProbability(Word word, Tag tag){
+		return table.get(word).tagProbability(tag);
+	}
 }

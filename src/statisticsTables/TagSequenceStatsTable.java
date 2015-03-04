@@ -21,4 +21,8 @@ public class TagSequenceStatsTable implements Serializable {
 		tagStats.addInstanceOfFollowingTag(tag2);		
 	}
 	
+	public double getSequenceProbability(Tag tag1, Tag tag2){
+		return table.get(tag1).followingTagProbability(tag2);
+	}
+	
 }
