@@ -1,5 +1,4 @@
 package statisticsTables;
-import java.util.Hashtable;
 import java.util.List;
 
 
@@ -30,6 +29,7 @@ public class StatisticsCompiler {
 				}
 				prevWord = tempWord;
 				wordTagStatsTable.addWord(word);
+				naiveBayesFeatures.add(word);
 			}
 		}		
 	}
@@ -46,6 +46,10 @@ public class StatisticsCompiler {
 		this.tagSequenceStatsTable = new TagSequenceStatsTable();
 		this.wordTagStatsTable = new WordTagStatsTable();	
 		this.naiveBayesFeatures = new NaiveBayesFeatures();
+	}
+	
+	public double getNaiveBayesTagProbability(String word, Tag tag){
+		return naiveBayesFeatures.getTagProbability(word, tag) * getTagProbability(new Word(word, Tag.CC),tag);
 	}
 	
 }

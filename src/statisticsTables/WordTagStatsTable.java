@@ -48,13 +48,13 @@ public class WordTagStatsTable implements Serializable {
 		if(wordStats != null){
 			Integer numTag = tagInstances.get(tag);
 			if(numTag!=null){
-				double prob = Math.log10(wordStats.tag(tag) / tagInstances.get(tag));
+				double prob = (double) wordStats.tag(tag) / (double) numTag;
 				
 				//System.out.println("word - " + word.getWord() + ", tag - " + tag + ", prob - " + prob);
 				
 				return prob;
 			}
 		}
-		return 1;
+		return 0.01;
 	}
 }

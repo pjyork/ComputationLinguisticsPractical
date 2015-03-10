@@ -9,7 +9,10 @@ public class NaiveBayesFeatures {
 	private Hashtable<Tag, Integer> numericTagInstances;
 	private Hashtable<Tag, Integer> capitalisedTagInstances;
 	private Hashtable<Tag, Integer> allCapsTagInstances;
+	private Hashtable<Tag, Integer> endsInSTagInstances;
 	private Hashtable<Tag, Integer> tagInstances;
+	private Hashtable<String, Integer> wordInstances;
+	private Integer wordsTotal = 0;
 	
 	public NaiveBayesFeatures(){
 		this.initialise();
@@ -19,10 +22,14 @@ public class NaiveBayesFeatures {
 		 this.numericTagInstances = new Hashtable<Tag, Integer>();
 		 this.capitalisedTagInstances = new Hashtable<Tag, Integer>();		
 		 this.allCapsTagInstances = new Hashtable<Tag, Integer>();	
+		 this.endsInSTagInstances = new Hashtable<Tag, Integer>();
 		 this.tagInstances = new Hashtable<Tag, Integer>();	
+		 this.wordInstances = new Hashtable<String, Integer>();	
+		 this.wordsTotal = 0; 
 	}
 	
 	public void add(Word word){
+		wordsTotal++;
 		Tag tag = word.getTag();
 		increment(tagInstances, tag);
 		String string = word.getWord();
@@ -35,7 +42,19 @@ public class NaiveBayesFeatures {
 		if(isAllCaps(string)){
 			increment(allCapsTagInstances, tag);
 		}
-		
+		if(endsInS(string)){
+			increment(endsInSTagInstances, tag);
+		}
+		Integer wordInstance = wordInstances.get(string);
+		if(wordInstance == null) { 
+			wordInstance = 0; 
+		}
+		wordInstances.put(string, ++wordInstance);
+	}
+
+	private boolean endsInS(String string) {
+		int n = string.length() - 1;
+		return string.charAt(n) == 's' || string.charAt(n) == 'S';
 	}
 
 	private boolean isAllCaps(String string) {
@@ -43,6 +62,7 @@ public class NaiveBayesFeatures {
 		int pos = 0;
 		while(isAllCaps && pos < string.length()){
 			isAllCaps = Character.isUpperCase(string.charAt(pos));
+			pos++;
 		}
 		return isAllCaps;
 	}
@@ -57,6 +77,7 @@ public class NaiveBayesFeatures {
 			if(Character.isDigit(string.charAt(pos))){
 				return true;
 			}
+			pos++;
 		}
 		return false;
 	}
@@ -70,7 +91,7 @@ public class NaiveBayesFeatures {
 		hashTable.put(tag, instances);		
 	}
 
-	public double numericTagProbability(Tag tag, boolean isNumeric){		
+	private double numericTagProbability(Tag tag, boolean isNumeric){		
 		Integer numericInst = numericTagInstances.get(tag);
 		return getProbability(numericInst, isNumeric, tag);		
 	}
@@ -80,20 +101,42 @@ public class NaiveBayesFeatures {
 			instances = 1;
 		}
 		int tagInstance = tagInstances.get(tag);
-		double prob = instances / tagInstance;
+		double prob = (double) instances / (double) tagInstance;
 		if(!needToInvert){
 			prob = 1 - prob;
 		}
 		return prob;
 	}
 
-	public double capitalisedTagProbability(Tag tag, boolean isCapitalised){
+	private double capitalisedTagProbability(Tag tag, boolean isCapitalised){
 		Integer capitalisedInst = capitalisedTagInstances.get(tag);
 		return getProbability(capitalisedInst, isCapitalised, tag);
 	}
 	
-	public double allCapsTagProbability(Tag tag, boolean isAllCaps){
+	private double allCapsTagProbability(Tag tag, boolean isAllCaps){
 		Integer allCapsInst = allCapsTagInstances.get(tag);
 		return getProbability(allCapsInst, isAllCaps, tag);
+	}
+	
+	private double endsInSTagProbability(Tag tag, boolean endsInS){
+		Integer endsInSInst = endsInSTagInstances.get(tag);
+		return getProbability(endsInSInst, endsInS, tag);
+	}
+	
+	public double getTagProbability(String word, Tag tag){
+		double numericProb, capitalisedProb, allCapsProb, endsInSProb;
+		numericProb = numericTagProbability(tag, isNumeric(word));
+		capitalisedProb = capitalisedTagProbability(tag, isCapitalised(word));
+		allCapsProb = allCapsTagProbability(tag, isAllCaps(word));
+		endsInSProb = endsInSTagProbability(tag, endsInS(word));
+		double tagProb = (double) tagInstances.get(tag) / (double) wordsTotal;
+		double wordProb = wordProbability(word);
+		return tagProb * numericProb * capitalisedProb * allCapsProb * endsInSProb / wordProb;
+	}
+
+	private double wordProbability(String word) {
+		Integer instances = wordInstances.get(word);
+		if(instances == null) instances = 1;
+		return (double) instances / (double) wordsTotal;
 	}
 }

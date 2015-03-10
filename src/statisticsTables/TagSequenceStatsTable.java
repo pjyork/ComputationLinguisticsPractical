@@ -25,10 +25,9 @@ public class TagSequenceStatsTable implements Serializable {
 	public double getSequenceProbability(Tag tag1, Tag tag2){
 		if(table.get(tag1) != null){
 			double prob =  (table.get(tag1).followingTagProbability(tag2));
-			System.out.println("tag1 - " + tag1 + ", tag2 - " + tag2 + ", prob - " + prob);
 			return prob;
 		}
-		else return 1;
+		else return 0.01;
 	}
 	
 }

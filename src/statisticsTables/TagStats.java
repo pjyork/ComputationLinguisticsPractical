@@ -25,7 +25,7 @@ public class TagStats {
 	
 	public double followingTagProbability(Tag tag){
 		if(instances == 0){
-			return 0;
+			return 0.01;
 		}
 		Integer followingInstances = table.get(tag);
 		if(followingInstances == null){
@@ -33,6 +33,6 @@ public class TagStats {
 		}
 		
 		
-		return followingInstances / instances;
+		return (double) followingInstances / (double) instances;
 	}
 }

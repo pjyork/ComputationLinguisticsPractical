@@ -18,7 +18,7 @@ public class SentenceParser {
 		String currentTag = "";
 		boolean readingTag = false; // is true iff we are currently reading a tag for a word
 		//this is true immediately after seeing a '/' character until we see a space
-		
+		result.add(new Word(" ", Tag.START));
 		while(i < sentence.length()){
 			currentChar = sentence.charAt(i++);
 			if(!readingTag){
