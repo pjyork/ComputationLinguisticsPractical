@@ -3,14 +3,16 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 
 public class SentenceParser {
-	public Sentence parseSentence(String sentence){
+	
+	public List<Word> parseSentence(String sentence){
 		int i = 0;
-		Sentence result = new Sentence();
+		List<Word> result = new ArrayList<Word>();
 		char currentChar = '~';
 		String currentWord = "";
 		String currentTag = "";
@@ -28,11 +30,20 @@ public class SentenceParser {
 				}
 			}
 			else{
-				if(currentChar == ' '){
-					Tag tag = getTag(currentTag);
+				if(currentChar == ' '){				
+					try {
+					Tag tag = Tag.valueOf(currentTag);					
 					readingTag = false;
-					result.addWord(new Word(currentWord, tag));
+					result.add(new Word(currentWord, tag));
 					currentWord = "";
+					currentTag = "";
+					}
+					catch (IllegalArgumentException e) {
+						readingTag = false;
+						currentWord = "";
+						currentTag = "";
+						
+					}
 				}
 				else{
 					currentTag += currentChar;
@@ -42,84 +53,7 @@ public class SentenceParser {
 		return result;
 	}
 	
-	private Tag getTag(String tagString) {
-		Tag result = Tag.CC;
-		switch(tagString){
-			case "CC":
-				result = Tag.CC;
-			case "CD":
-				result = Tag.CD;
-			case "DT":
-				result = Tag.DT;
-			case "EX":
-				result = Tag.EX;
-			case "FW":
-				result = Tag.FW;
-			case "IN":
-				result = Tag.IN;
-			case "JJ":
-				result = Tag.JJ;
-			case "JJR": 
-				result = Tag.JJR;
-			case "JJS":
-				result = Tag.JJS;
-			case "LS":
-				result = Tag.LS;
-			case "MD":
-				result = Tag.MD;
-			case "NN":
-				result = Tag.NN;
-			case "NNS":
-				result = Tag.NNS;
-			case "NNP":
-				result = Tag.NNP;
-			case "NNPS":
-				result = Tag.NNPS;
-			case "PDT":
-				result = Tag.PDT;
-			case "POS":
-				result = Tag.POS;
-			case "PRP":
-				result = Tag.PRP;
-			case "PRP$":
-				result = Tag.PRP$;
-			case "RB":
-				result = Tag.RB;
-			case "RBR":
-				result = Tag.RBR;
-			case "RBS":
-				result = Tag.RBS;
-			case "RP":
-				result = Tag.RP;
-			case "SYM":
-				result = Tag.SYM;
-			case "TO":
-				result = Tag.TO;
-			case "UH":
-				result = Tag.UH;
-			case "VB":
-				result = Tag.VB;
-			case "VBD":
-				result = Tag.VBD;
-			case "VBG":
-				result = Tag.VBG;
-			case "VBN":
-				result = Tag.VBP;
-			case "VBZ":
-				result = Tag.VBZ;
-			case "WDT":
-				result = Tag.WDT;
-			case "WP":
-				result = Tag.WP;
-			case "WP$":
-				result = Tag.WP$;
-			case "WRB":
-				result = Tag.WRB;
-			default:
-				result = Tag.PUNCT;
-		}
-		return result;
-	}
+	
 
 	public List<String> splitSentences(String fileName) throws IOException{
 
@@ -129,10 +63,11 @@ public class SentenceParser {
 			String current = "";
 			String line = "";
             while( (line = istream.readLine()) != null) {
-            	if(line == "./. "){
+            	if(line.equalsIgnoreCase("./. ")){
             		results.add(current);
+            		current = "";
             	}
-            	else if(line != "======================================"){
+            	else if(!line.equals("======================================")){
             		current += line;
             	}	
             }
@@ -143,8 +78,8 @@ public class SentenceParser {
 		return results;
 	}
 	
-	public List<Sentence> parseSentences(String fileName){
-		List<Sentence> results = new LinkedList<Sentence>();
+	public List<List<Word>> parseSentences(String fileName){
+		List<List<Word>> results = new ArrayList<List<Word>>();
 		List<String> sentenceStrings = new LinkedList<String>();
 		try {
 			sentenceStrings = splitSentences(fileName);
