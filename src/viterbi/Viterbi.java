@@ -5,12 +5,13 @@ import java.util.List;
 import main.Tagger;
 import parsing.Word;
 import parsing.Tag;
+import statisticsTables.Statistics;
 import statisticsTables.StatisticsCompiler;
 
 public class Viterbi implements Tagger {
 	
 	
-	public Tag[] tagSentence(List<Word> sentence, StatisticsCompiler stats){
+	public Tag[] tagSentence(List<Word> sentence, Statistics stats){
 		int n = sentence.size();
 		Tag[] result;
 		result = new Tag[n];

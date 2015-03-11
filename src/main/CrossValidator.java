@@ -6,7 +6,7 @@ import java.util.List;
 
 import parsing.Tag;
 import parsing.Word;
-import statisticsTables.StatisticsCompiler;
+import statisticsTables.Statistics;
 //takes a given tagger, and then runs cross-validation on it, by compiling the stats required
 // for different training sets and runs the tagger on the remaining sentences, giving the tagger
 // the stats compiled
@@ -14,9 +14,9 @@ import statisticsTables.StatisticsCompiler;
 
 public class CrossValidator {
 	private List<List<Word>> allSentences;
-	private StatisticsCompiler stats;
+	private Statistics stats;
 	
-	public CrossValidator(StatisticsCompiler stats, List<List<Word>> allSentences){
+	public CrossValidator(Statistics stats, List<List<Word>> allSentences){
 		this.stats = stats;
 		this.allSentences = allSentences;
 	}
@@ -42,7 +42,7 @@ public class CrossValidator {
 				Tag[] result = tagger.tagSentence(sentence, stats);
 				total += sentence.size();
 				for (int j = 1; j < sentence.size(); j++) {
-					if(!true){
+					if(true){
 						System.out.println(sentence.get(j).getTag() + " - " + result[j]);
 						System.out.println(sentence.size() + " -  j " + j);
 						System.out.println(sentence.get(j).getWord());

@@ -6,16 +6,17 @@ import java.util.List;
 import main.Tagger;
 import parsing.Tag;
 import parsing.Word;
+import statisticsTables.Statistics;
 import statisticsTables.StatisticsCompiler;
 
 public class NaiveBayes implements Tagger {
 	
-	private double tagProbability(Tag tag, String word, StatisticsCompiler stats){		
+	private double tagProbability(Tag tag, String word, Statistics stats){		
 		return stats.getNaiveBayesTagProbability(word, tag);
 	}
 
 	@Override
-	public Tag[] tagSentence(List<Word> sentence, StatisticsCompiler stats) {
+	public Tag[] tagSentence(List<Word> sentence, Statistics stats) {
 		Tag[] tags = Tag.values();
 		Tag[] result = new Tag[sentence.size()];
 		for(int i = 0; i < sentence.size(); i++){

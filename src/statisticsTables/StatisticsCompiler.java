@@ -8,7 +8,7 @@ import parsing.Tag;
 import parsing.Word;
 
 
-public class StatisticsCompiler {
+public class StatisticsCompiler implements Statistics{
 	//keeps track of all the statistics required for both viterbi and naive bayes
 
 	private TagSequenceStatsTable tagSequenceStatsTable;

@@ -6,13 +6,14 @@ import java.util.List;
 
 
 
-import statisticsTables.StatisticsCompiler;
+
+import statisticsTables.Statistics;
 
 public class FileParser {
 	
 	//parse the files into sentences (lists of Words)
 	
-	public List<List<Word>> parseFiles(File dir, StatisticsCompiler stats) {
+	public List<List<Word>> parseFiles(File dir, Statistics stats) {
 		File directories[] = dir.listFiles();
 		List<List<Word>> allSentences = new ArrayList<List<Word>>();
 		SentenceParser parser = new SentenceParser();
