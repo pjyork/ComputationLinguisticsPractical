@@ -10,10 +10,7 @@ import statisticsTables.StatisticsCompiler;
 
 public class FileParser {
 	
-	//sort out relationships between sentence parsing and counter hashtables;
-	
-
-	
+	//parse the files into sentences (lists of Words)
 	
 	public List<List<Word>> parseFiles(File dir, StatisticsCompiler stats) {
 		File directories[] = dir.listFiles();

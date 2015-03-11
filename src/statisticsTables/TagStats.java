@@ -25,14 +25,15 @@ public class TagStats {
 	
 	public double followingTagProbability(Tag tag){
 		if(instances == 0){
-			return 0.01;
+		//	return 0.01;
+			System.out.println("wah!");
 		}
 		Integer followingInstances = table.get(tag);
-		if(followingInstances == null){
-			followingInstances = 1;
+		if(followingInstances == null){	
+			followingInstances = 0;
 		}
 		
 		
-		return (double) followingInstances / (double) instances;
+		return (double) (followingInstances+1) / (double) (instances + Tag.values().length);
 	}
 }

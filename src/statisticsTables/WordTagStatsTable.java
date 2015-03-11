@@ -45,16 +45,21 @@ public class WordTagStatsTable implements Serializable {
 
 	public double getTagProbability(Word word, Tag tag){
 		WordStats wordStats = table.get(word.getWord());
+		Integer count = 0;
+		Integer numTag = 0;
+		double prob = 0.0;
 		if(wordStats != null){
-			Integer numTag = tagInstances.get(tag);
+			numTag = tagInstances.get(tag);
 			if(numTag!=null){
-				double prob = (double) wordStats.tag(tag) / (double) numTag;
-				
+				prob = (double) wordStats.tag(tag) / (double) numTag;
 				//System.out.println("word - " + word.getWord() + ", tag - " + tag + ", prob - " + prob);
-				
 				return prob;
 			}
+			numTag = 1;
+			System.out.println("nulltag -  " + tag);
+			
 		}
-		return 0.01;
+		prob = (double) (count + 1) / (double) (numTag + table.keySet().size());
+		return prob;
 	}
 }

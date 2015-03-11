@@ -9,6 +9,7 @@ import java.util.List;
 
 
 public class SentenceParser {
+	//given a file, split it into the constituent sentences, and parse those	
 	
 	public List<Word> parseSentence(String sentence){
 		int i = 0;

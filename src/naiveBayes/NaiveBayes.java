@@ -19,7 +19,7 @@ public class NaiveBayes implements Tagger {
 		Tag[] tags = Tag.values();
 		Tag[] result = new Tag[sentence.size()];
 		for(int i = 0; i < sentence.size(); i++){
-			double maxProb = 0.0;
+			double maxProb = Double.NEGATIVE_INFINITY;
 			String word = sentence.get(i).getWord();
 			for(int j = 0; j < tags.length; j++){
 				double tagProb = tagProbability(tags[j], word, stats);

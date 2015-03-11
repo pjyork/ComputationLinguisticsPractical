@@ -9,7 +9,8 @@ import parsing.Word;
 
 
 public class StatisticsCompiler {
-	//takes a list of tagged sentences and creates or updates existing tables appropriately
+	//keeps track of all the statistics required for both viterbi and naive bayes
+
 	private TagSequenceStatsTable tagSequenceStatsTable;
 	private WordTagStatsTable wordTagStatsTable;
 	private NaiveBayesFeatures naiveBayesFeatures;
@@ -17,6 +18,14 @@ public class StatisticsCompiler {
 	public StatisticsCompiler(){
 		this.initialise();	
 	}
+	
+	public void initialise() {
+		//reset this object
+		this.tagSequenceStatsTable = new TagSequenceStatsTable();
+		this.wordTagStatsTable = new WordTagStatsTable();	
+		this.naiveBayesFeatures = new NaiveBayesFeatures();
+	}
+	
 	public void updateStats(List<List<Word>> sentences){
 		Word prevWord = null; 
 		Word currentWord = null;
@@ -35,21 +44,21 @@ public class StatisticsCompiler {
 	}
 
 	public double getSequenceProbability(Tag tag1, Tag tag2) {
-		return tagSequenceStatsTable.getSequenceProbability(tag1, tag2);
+		//get the probability of a word being tag2, given that it's preceded by tag1
+		double prob = tagSequenceStatsTable.getSequenceProbability(tag1, tag2);
+		if(prob == 0.0) System.out.println("zer0 tag seq");
+		return Math.log10(prob);
 	}
 
 	public double getTagProbability(Word word, Tag tag) {
-		return wordTagStatsTable.getTagProbability(word, tag);
-	}
-	
-	public void initialise() {
-		this.tagSequenceStatsTable = new TagSequenceStatsTable();
-		this.wordTagStatsTable = new WordTagStatsTable();	
-		this.naiveBayesFeatures = new NaiveBayesFeatures();
+		//get the probability of a word being a tag, given what the string for the word is
+		double prob = wordTagStatsTable.getTagProbability(word, tag);
+		return Math.log10(prob);
 	}
 	
 	public double getNaiveBayesTagProbability(String word, Tag tag){
-		return naiveBayesFeatures.getTagProbability(word, tag) * getTagProbability(new Word(word, Tag.CC),tag);
+		//get the naive bayes probability, given the string of the word
+		return Math.log10(naiveBayesFeatures.getTagProbability(word, tag)) + getTagProbability(new Word(word, Tag.CC),tag);
 	}
 	
 }

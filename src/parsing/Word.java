@@ -1,5 +1,5 @@
 package parsing;
-
+//class for containing a word and its tag. 
 
 public class Word {
 	private Tag tag;

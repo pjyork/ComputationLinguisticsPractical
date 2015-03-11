@@ -4,13 +4,26 @@ import java.util.Hashtable;
 
 import parsing.Tag;
 import parsing.Word;
+//the boolean features required for the naive bayes algorithm
+
 
 public class NaiveBayesFeatures {
+	//count of  words which contain a numeral and are of the given tag
 	private Hashtable<Tag, Integer> numericTagInstances;
+	
+	//count of words which contain are capitalised (e.g. "Hello") and are of the given tag
 	private Hashtable<Tag, Integer> capitalisedTagInstances;
+	
+	//count of words which are all caps (e.g. "HELLO") and are of the given tag
 	private Hashtable<Tag, Integer> allCapsTagInstances;
+	
+	//count of words which end in the letter S and are of the given tag
 	private Hashtable<Tag, Integer> endsInSTagInstances;
+
+	//count of instances of the given tag, total
 	private Hashtable<Tag, Integer> tagInstances;
+
+	//count of instances of the given word
 	private Hashtable<String, Integer> wordInstances;
 	private Integer wordsTotal = 0;
 	
@@ -19,16 +32,22 @@ public class NaiveBayesFeatures {
 	}
 	
 	public void initialise() {
+		//reset the object
 		 this.numericTagInstances = new Hashtable<Tag, Integer>();
 		 this.capitalisedTagInstances = new Hashtable<Tag, Integer>();		
 		 this.allCapsTagInstances = new Hashtable<Tag, Integer>();	
 		 this.endsInSTagInstances = new Hashtable<Tag, Integer>();
 		 this.tagInstances = new Hashtable<Tag, Integer>();	
 		 this.wordInstances = new Hashtable<String, Integer>();	
-		 this.wordsTotal = 0; 
+		 this.wordsTotal = 0;
+		 Tag[] tags = Tag.values();
+		 for(int i = 0; i < tags.length; i++){
+			 increment(tagInstances, tags[i]);
+		 }
 	}
 	
 	public void add(Word word){
+		//take a word, check its features, and then add to the appropriate counts
 		wordsTotal++;
 		Tag tag = word.getTag();
 		increment(tagInstances, tag);
@@ -83,6 +102,7 @@ public class NaiveBayesFeatures {
 	}
 
 	private void increment(Hashtable<Tag, Integer> hashTable, Tag tag) {
+		//increment the value for the given tag of the given hashtable
 		Integer instances = hashTable.get(tag);
 		if(instances == null){
 			instances = 0;
