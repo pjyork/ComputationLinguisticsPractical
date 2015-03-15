@@ -7,9 +7,9 @@ import java.util.List;
 import parsing.Tag;
 import parsing.Word;
 import statisticsTables.Statistics;
-//takes a given tagger, and then runs cross-validation on it, by compiling the stats required
-// for different training sets and runs the tagger on the remaining sentences, giving the tagger
-// the stats compiled
+//takes a given tagger, and then runs cross-validation on it, by compiling the stats given
+// by different training sets and runs the tagger on the remaining testing set, giving the tagger
+// the stats from the training
 
 
 public class CrossValidator {
@@ -35,19 +35,12 @@ public class CrossValidator {
 			training.removeAll(testing);
 			stats.updateStats(training);
 			
-			//System.out.println(counter.tagCounter.values());
 			int correct = 0;
 			int total = 0;
 			for (List<Word> sentence : testing) {
 				Tag[] result = tagger.tagSentence(sentence, stats);
 				total += sentence.size();
-				for (int j = 1; j < sentence.size(); j++) {
-					if(true){
-						System.out.println(sentence.get(j).getTag() + " - " + result[j]);
-						System.out.println(sentence.size() + " -  j " + j);
-						System.out.println(sentence.get(j).getWord());
-					}
-					
+				for (int j = 0; j < sentence.size(); j++) {					
 					if (result[j] == sentence.get(j).getTag()){
 						correct+=1;					
 					}

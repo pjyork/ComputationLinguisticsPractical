@@ -23,6 +23,7 @@ public class SentenceParser {
 		while(i < sentence.length()){
 			currentChar = sentence.charAt(i++);
 			if(!readingTag){
+				//if we are reading a word 
 				if(currentChar == '/'){
 					readingTag = true;
 				}
@@ -31,6 +32,7 @@ public class SentenceParser {
 				}
 			}
 			else{
+				//if we are reading a tag
 				if(currentChar == ' '){				
 					try {
 					Tag tag = Tag.valueOf(currentTag);					
@@ -57,7 +59,8 @@ public class SentenceParser {
 	
 
 	public List<String> splitSentences(String fileName) throws IOException{
-
+		//return a list of strings where each string represents one sentence
+		//which is otherwise unchanged from the file
 		LinkedList<String> results = new LinkedList<String>();
 		BufferedReader istream = new BufferedReader(new FileReader(fileName));
 		try {

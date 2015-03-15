@@ -143,6 +143,7 @@ public class NaiveBayesFeatures {
 		return getProbability(endsInSInst, endsInS, tag);
 	}
 	
+	//compute the probability of a given tag given a word
 	public double getTagProbability(String word, Tag tag){
 		double numericProb, capitalisedProb, allCapsProb, endsInSProb;
 		numericProb = numericTagProbability(tag, isNumeric(word));
@@ -154,6 +155,7 @@ public class NaiveBayesFeatures {
 		return tagProb * numericProb * capitalisedProb * allCapsProb * endsInSProb / wordProb;
 	}
 
+	//the probability of any word being the string given, with no other information
 	private double wordProbability(String word) {
 		Integer instances = wordInstances.get(word);
 		if(instances == null) instances = 1;

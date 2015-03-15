@@ -7,7 +7,6 @@ import main.Tagger;
 import parsing.Tag;
 import parsing.Word;
 import statisticsTables.Statistics;
-import statisticsTables.StatisticsCompiler;
 
 public class NaiveBayes implements Tagger {
 	
